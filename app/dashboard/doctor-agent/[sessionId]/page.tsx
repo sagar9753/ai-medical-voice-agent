@@ -124,6 +124,7 @@ const page = () => {
     vapi.on('call-start', () => {
       console.log('Call started')
       setCallStarted(true)
+      setConnecting(false)
       startTimer();
     });
     vapi.on('call-end', () => {
