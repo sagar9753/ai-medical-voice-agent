@@ -8,15 +8,7 @@ import { Loader } from 'lucide-react'
 import React from 'react'
 
 const Dashboard = () => {
-  const {isLoaded} = useAuth()
-
-  if (!isLoaded) {
-    return (
-      <div className="flex justify-center items-center h-[300px]">
-        <Loader className="animate-spin" />
-      </div>
-    );
-  }
+  
   return (
     <div className="space-y-8">
 

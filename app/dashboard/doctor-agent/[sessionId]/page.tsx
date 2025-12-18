@@ -275,7 +275,7 @@ const page = () => {
   }
 
   return (
-    <div className="rounded-2xl border bg-background p-4 sm:p-6 space-y-6">
+    <div className="rounded-2xl border bg-background p-4 sm:p-6 space-y-3 sm:space-y-6 ">
 
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -311,7 +311,7 @@ const page = () => {
                 className="rounded-full object-cover border"
               />
 
-              <h2 className="mt-3 text-lg font-semibold">
+              <h2 className="mt-1 sm:mt-3 text-lg font-semibold">
                 {doctorAgentDetails.selectedDoctor.specialist}
               </h2>
 
@@ -323,7 +323,7 @@ const page = () => {
         </div>
 
         {/* RIGHT — Transcript */}
-        <div className="rounded-xl border bg-muted/40 p-4 h-[260px] md:h-[320px] overflow-y-auto space-y-2">
+        <div className="rounded-xl border bg-muted/40 p-4 h-[230px] md:h-[320px] overflow-y-auto space-y-2">
           {messages.slice(-4).map((msg, ind) => (
             <p
               key={ind}

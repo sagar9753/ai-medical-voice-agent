@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useUser } from '@clerk/nextjs';
 import { UserDetailContext } from '@/context/UserDetailContext';
+import { Loader } from 'lucide-react';
 
 function Provider({
   children,
@@ -12,7 +13,7 @@ function Provider({
 }>) {
 
   const [userDetail, setUserDetail] = useState<any>({});
-  const { user } = useUser()
+  const { user,isLoaded } = useUser()
 
   useEffect(() => {
     user && CreateNewUser()
@@ -23,6 +24,13 @@ function Provider({
     setUserDetail(res?.data)
   }
 
+  if (!isLoaded) {
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <Loader className="animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div>
