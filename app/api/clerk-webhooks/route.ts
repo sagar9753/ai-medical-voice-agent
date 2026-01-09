@@ -50,9 +50,8 @@ export async function POST(req: Request) {
   }
 
   // 5️⃣ Handle subscription.created
-  if (event.type === "subscription.active" || event.type === "subscription.created") {
-    const clerkUserId = event.data.user_id;
-
+  if (event.type === "paymentAttempt.created") {
+    const clerkUserId = event.data.payer.user_id;
     await db
       .update(usersTable)
       .set({

@@ -1,10 +1,22 @@
 import { AIDoctorAgents } from "@/lib/list";
 import { openai } from "@/lib/openAi";
 import { NextRequest, NextResponse } from "next/server";
+// import { auth, clerkClient } from "@clerk/nextjs/server";
 
 
 export async function POST(req: NextRequest) {
     const { detail } = await req.json();
+
+//     const { userId } = await auth();
+//   if (!userId) {
+//     return new Response("Unauthorized", { status: 401 });
+//   }
+//   const client = await clerkClient(); 
+
+//   const subscriptions = await client.billing.getUserBillingSubscription(userId);
+//   console.log("HHHHHHHHHH",subscriptions);
+  
+  
 
     try {
         

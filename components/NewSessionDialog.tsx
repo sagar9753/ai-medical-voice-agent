@@ -96,7 +96,7 @@ const NewSessionDialog = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        {(userDetail?.credits! > 0 || isProUser) && <div>
+                        {(userDetail?.credits! > 0) && <div>
                             {!suggestedDoctors ? "Add Symptoms or Any Other detail" : "Select the doctor"}
                         </div>}
                     </DialogTitle>
@@ -125,11 +125,11 @@ const NewSessionDialog = () => {
                               </div>
                     
                               <h2 className="text-lg font-semibold">
-                                Free Limit Reached
+                                Limit Reached
                               </h2>
                     
                               <p className="text-sm text-muted-foreground">
-                                You’ve exceeded your free consultation limit.
+                                You’ve exceeded your {isProUser ? 'Subscription credits' : 'free consultation limit'} .
                                 Upgrade your plan to continue talking with AI doctors.
                               </p>
                     
