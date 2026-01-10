@@ -56,12 +56,12 @@ const ViewReportDialog = ({ record }: props) => {
                                 {/* Responsive grid: 1 column on mobile, 2 columns on sm+ */}
                                 <div className="grid gap-y-3 text-sm">
                                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-y-3'>
-                                    <p><span className="font-medium">Doctor :</span> {record?.selectedDoctor.specialist}</p>
+                                    <p><span className="font-medium">Doctor :</span> {record?.selectedDoctor?.specialist}</p>
                                     <p><span className="font-medium">User :</span> Anonymous</p>
                                     </div>
 
                                     <p>
-                                        <span className="font-medium">Consulted On :</span> {formatDate(record.createdOn)}
+                                        <span className="font-medium">Consulted On :</span> {formatDate(record?.createdOn)}
                                     </p>
 
                                     <p>
@@ -88,7 +88,7 @@ const ViewReportDialog = ({ record }: props) => {
                             <section>
                                 <h2 className="text-lg font-semibold mb-3 text-blue-700">Symptoms</h2>
                                 <ul className="list-disc list-inside text-sm space-y-1">
-                                    {report?.symptoms.map((sym, ind) => (
+                                    {report?.symptoms?.map((sym, ind) => (
                                         <li key={ind}>{sym}</li>
                                     ))}
                                 </ul>
@@ -109,7 +109,7 @@ const ViewReportDialog = ({ record }: props) => {
                             <section>
                                 <h2 className="text-lg font-semibold mb-3 text-blue-700">Medication Mentioned</h2>
                                 <ul className="list-disc list-inside text-sm space-y-1">
-                                    {report?.medicationsMentioned.map((med, ind) => (
+                                    {report?.medicationsMentioned?.map((med, ind) => (
                                         <li key={ind}>{med}</li>
                                     ))}
                                 </ul>
@@ -119,7 +119,7 @@ const ViewReportDialog = ({ record }: props) => {
                             <section>
                                 <h2 className="text-lg font-semibold mb-3 text-blue-700">Recommendation</h2>
                                 <ul className="list-disc list-inside text-sm space-y-1">
-                                    {report?.recommendations.map((rec, ind) => (
+                                    {report?.recommendations?.map((rec, ind) => (
                                         <li key={ind}>{rec}</li>
                                     ))}
                                 </ul>

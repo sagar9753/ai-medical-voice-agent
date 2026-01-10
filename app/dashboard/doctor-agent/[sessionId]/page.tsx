@@ -152,22 +152,21 @@ const page = () => {
     });
     vapi.on('error', (error: any) => {
       // console.error('Vapi error:', error);
-      toast.error(error)
+      toast.error(error?.message || "An error occurred")
 
-      // setCallStarted(false);
-      // setConnecting(false);
+      setCallStarted(false);
+      setConnecting(false);
     });
 
-    vapiInstance.on('speech-start', () => {
+    vapi.on('speech-start', () => {
       console.log('Assistant started speaking');
       setCurrentRole('assistant');
     });
-    vapiInstance.on('speech-end', () => {
+    vapi.on('speech-end', () => {
       console.log('Assistant stopped speaking');
       setCurrentRole('user');
     });
 
-    setConnecting(false);
   }
 
   const endCall = async () => {
@@ -176,37 +175,40 @@ const page = () => {
     }
     setDisconnecting(true)
     // report
-
+    let res;
     try {
-      const res = await generateReport();
+      res = await generateReport();
 
 
       // stop the call
       vapiInstance.stop();
 
-      // Optionally removve listeners (good for memory management)
+      // removve listeners (good for memory management)
       // vapiInstance.off('call-start')
       // vapiInstance.off('call-end')
       // vapiInstance.off('message')
+      // vapiInstance.off('error')
       // vapiInstance.off('speech-start')
       // vapiInstance.off('speech-end')
-
       // reset call state
       setCallStarted(false)
       setVapiInstance(null)
 
-      toast.success("Your Report is generated")
-      router.replace('/dashboard')
     } catch (error: any) {
-      // console.error("End call error:", error);
+      console.error("End call error:", error);
 
       toast.error(
         error?.response?.data?.message ||
         error?.message ||
         "Failed to end call properly"
       );
+      
     } finally {
       setDisconnecting(false);
+      if(res?.status == 200){
+        toast.success("Your Report is generated")
+        router.replace('/dashboard')
+      }
     }
   };
 
@@ -228,7 +230,7 @@ const page = () => {
       }
 
       // console.log("Generated Report", res)
-      return res.data
+      return res
     } catch (error: any) {
       toast.error(
         error?.response?.data?.message ||
@@ -238,7 +240,7 @@ const page = () => {
     }
   }
 
-  if (!isLoaded) {
+  if (!isLoaded || !doctorAgentDetails) {
     return (
       <div className="flex justify-center items-center h-[300px]">
         <Loader className="animate-spin" />

@@ -64,7 +64,9 @@ const DashNavbar = () => {
               </button>
             </>
           ) : (
-            <Button size="lg">Login</Button>
+            <Link href="/sign-in" className="flex items-center gap-2">
+              <Button size="lg">Login</Button>
+            </Link>
           )}
         </div>
       </div>

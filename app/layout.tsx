@@ -33,9 +33,14 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Provider>
-            <DashNavbar/>
-          {children}
-          <Toaster richColors />
+            <DashNavbar />
+            {children}
+            <Toaster
+              position="top-right"
+              visibleToasts={4}
+              expand
+              richColors
+            />
           </Provider>
         </body>
       </html>

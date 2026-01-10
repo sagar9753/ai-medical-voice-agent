@@ -4,6 +4,13 @@ import { db } from "@/config/db";
 import { sessionChatTable, usersTable } from "@/config/schema";
 import { eq, sql } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
+import { GoogleGenAI } from "@google/genai";
+
+
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY!,
+});
+
 
 const report_gen_prompt = `You are an AI Medical Voice Agent that just finished a voice conversation with a user. Based on the doctor Ai agent info and conversation , generate a structured report with the following fields:
 1. sessionId: a unique session identifier
@@ -44,19 +51,26 @@ export async function POST(req: NextRequest) {
     // console.log("In Gen Rep Api", messages, doctorAgentDetails, sessionId, time);
     try {
         const userInput = "Ai Doctor Agent Info : " + JSON.stringify(doctorAgentDetails) + ", Conversation : " + JSON.stringify(messages) + ", Duration : " + JSON.stringify(time)
-        const completion = await openai.chat.completions.create({
-            model: "openai/gpt-oss-20b:free",
-            messages: [
-                { role: "system", content: report_gen_prompt },
+        const completion = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: [
                 {
-                    role: "user", content: userInput
-                }
+                    role: "user",
+                    parts: [
+                        {
+                            text: userInput,
+                        },
+                    ],
+                },
             ],
+            config: {
+                systemInstruction: report_gen_prompt,
+            },
         })
 
-        const rawResp = completion.choices[0].message
+        const rawResp = completion.text
         // @ts-ignore
-        const resp = rawResp.content.trim().replace('```json', '').replace('```', '')
+        const resp = rawResp.trim().replace('```json', '').replace('```', '')
         const JsonResp = JSON.parse(resp)
 
         // save report to db
@@ -72,6 +86,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json(JsonResp);
     } catch (error) {
+        console.log("________In Report________",error);
         return NextResponse.json({
             success: false,
             message: error instanceof Error

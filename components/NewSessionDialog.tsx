@@ -96,7 +96,7 @@ const NewSessionDialog = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        {(userDetail?.credits! > 0) && <div>
+                        {(userDetail?.credits! > 0 || isProUser) && <div>
                             {!suggestedDoctors ? "Add Symptoms or Any Other detail" : "Select the doctor"}
                         </div>}
                     </DialogTitle>
