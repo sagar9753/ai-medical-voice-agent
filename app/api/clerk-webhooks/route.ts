@@ -55,11 +55,11 @@ export async function POST(req: Request) {
     await db
       .update(usersTable)
       .set({
-        credits: sql`${usersTable.credits} + 30`,
+        credits: sql`${usersTable.credits} + 5`,
       })
       .where(eq(usersTable.clerkUserId, clerkUserId));
 
-    console.log("🎉 30 credits added");
+    console.log("🎉 5 credits added");
   }
 
   return new Response("Webhook processed", { status: 200 });

@@ -96,12 +96,12 @@ const NewSessionDialog = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
-                        {(userDetail?.credits! > 0 || isProUser) && <div>
+                        {(userDetail?.credits! > 0) && <div>
                             {!suggestedDoctors ? "Add Symptoms or Any Other detail" : "Select the doctor"}
                         </div>}
                     </DialogTitle>
                     <DialogDescription className='mt-3' >
-                        {(userDetail?.credits! > 0 || isProUser) ?
+                        {(userDetail?.credits! > 0) ?
                             <div>
                                 {!suggestedDoctors ? <div>
                                     {/* <h2>Add Symptoms or Any Other detail</h2> */}
@@ -144,7 +144,7 @@ const NewSessionDialog = () => {
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    {(userDetail?.credits! > 0 || isProUser) &&
+                    {(userDetail?.credits! > 0) &&
                         <div>
                             {!suggestedDoctors ?
                                 <Button disabled={!detail || loading} onClick={() => onClickNext()}>

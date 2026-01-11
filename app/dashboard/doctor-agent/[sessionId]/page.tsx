@@ -48,10 +48,12 @@ const page = () => {
   const { has, isLoaded } = useAuth()
   // @ts-ignore
   const isProUser = isLoaded && has({ plan: 'pro' })
+  
 
 
   useEffect(() => {
-    sessionId && ((userDetail?.credits! > 0 || isProUser)) && getDoctorAgentDetails()
+    
+    sessionId && userDetail?.credits > 0 && getDoctorAgentDetails()
   }, [sessionId, isProUser, userDetail])
 
   const startTimer = () => {
@@ -240,7 +242,7 @@ const page = () => {
     }
   }
 
-  if (!isLoaded || !doctorAgentDetails) {
+  if (!isLoaded) {
     return (
       <div className="flex justify-center items-center h-[300px]">
         <Loader className="animate-spin" />
@@ -248,7 +250,7 @@ const page = () => {
     );
   }
 
-  if (!(userDetail?.credits! > 0 || isProUser)) {
+  if (userDetail?.credits! <= 0) {
     return (
       <div className="mx-auto max-w-md rounded-2xl border bg-background p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col items-center gap-4 text-center">
@@ -275,6 +277,13 @@ const page = () => {
         </div>
       </div>
     )
+  }
+  if (!doctorAgentDetails) {
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <Loader className="animate-spin" />
+      </div>
+    );
   }
 
   return (
