@@ -48,11 +48,11 @@ const page = () => {
   const { has, isLoaded } = useAuth()
   // @ts-ignore
   const isProUser = isLoaded && has({ plan: 'pro' })
-  
+
 
 
   useEffect(() => {
-    
+
     sessionId && userDetail?.credits > 0 && getDoctorAgentDetails()
   }, [sessionId, isProUser, userDetail])
 
@@ -92,23 +92,27 @@ const page = () => {
   }
   const startCall = () => {
     setConnecting(true)
-    const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!);
+    const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY!)
     setVapiInstance(vapi)
-
+  
+    // console.log("HHHH",doctorAgentDetails?.selectedDoctor?.voiceId)
     const VapiAgentConfig = {
       name: 'AI Medical Voice Agent',
-      firstMessage: "Hello Thank you for connecting, can you tell me your name",
+      firstMessage: "Hello! Thank you for connecting. Can you tell me your name?",
+      
       transcriber: {
         provider: 'assembly-ai',
         language: 'en'
       },
+      
       voice: {
         provider: 'vapi',
         voiceId: doctorAgentDetails?.selectedDoctor?.voiceId
       },
+      
       model: {
-        provider: 'google',
-        model: 'gemini-2.0-flash',
+        provider: 'openai',
+        model: 'gpt-4o-mini',  // ✅ GPT-4o Mini
         messages: [
           {
             role: 'system',
@@ -117,60 +121,61 @@ const page = () => {
         ]
       }
     }
-
+  
     // Start voice conversation
     // @ts-ignore
     vapi.start(VapiAgentConfig);
-
-    // Listen for events
+  
+    // Event listeners
     vapi.on('call-start', () => {
       console.log('Call started')
       setCallStarted(true)
       setConnecting(false)
       startTimer();
     });
+  
     vapi.on('call-end', () => {
       console.log('Call ended')
-      toast.info("call ended")
+      toast.info("Call ended")
       setCallStarted(false)
       setConnecting(false)
       endTimer()
     });
+  
     vapi.on('message', (message) => {
       if (message.type === 'transcript') {
         const { role, transcriptType, transcript } = message
-        // console.log(`${message.role}: ${message.transcript}`);
-        if (transcriptType == 'partial') {
+        
+        if (transcriptType === 'partial') {
           setLiveTranscript(transcript)
           setCurrentRole(role)
         }
-        else if (transcriptType == 'final') {
-          // final transcript
-          setMessages((prev: any) => [...prev, { role: role, text: transcript }])
+        else if (transcriptType === 'final') {
+          setMessages((prev) => [...prev, { role: role, text: transcript }])
           setLiveTranscript("")
           setCurrentRole(null)
         }
       }
     });
+  
     vapi.on('error', (error: any) => {
-      // console.error('Vapi error:', error);
+      console.error('Vapi error:', error);
       toast.error(error?.message || "An error occurred")
-
       setCallStarted(false);
       setConnecting(false);
+      endTimer();
     });
-
+  
     vapi.on('speech-start', () => {
       console.log('Assistant started speaking');
       setCurrentRole('assistant');
     });
+  
     vapi.on('speech-end', () => {
       console.log('Assistant stopped speaking');
       setCurrentRole('user');
     });
-
   }
-
   const endCall = async () => {
     if (!vapiInstance) {
       toast.warning("No active call found")
@@ -181,9 +186,9 @@ const page = () => {
     try {
       res = await generateReport();
 
+      vapiInstance.stop();
 
       // stop the call
-      vapiInstance.stop();
 
       // removve listeners (good for memory management)
       // vapiInstance.off('call-start')
@@ -204,10 +209,10 @@ const page = () => {
         error?.message ||
         "Failed to end call properly"
       );
-      
+
     } finally {
       setDisconnecting(false);
-      if(res?.status == 200){
+      if (res?.status == 200) {
         toast.success("Your Report is generated")
         router.replace('/dashboard')
       }

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { openai } from "../../../lib/openAi";
 import { db } from "@/config/db";
 import { sessionChatTable, usersTable } from "@/config/schema";
 import { eq, sql } from "drizzle-orm";
